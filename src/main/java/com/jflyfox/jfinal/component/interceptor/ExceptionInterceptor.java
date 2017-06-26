@@ -39,7 +39,10 @@ public class ExceptionInterceptor implements Interceptor {
 		} catch (Exception e) {
 			log.error("异常：", e);
 			Controller controller = ai.getController();
-			controller.setAttr("error", e.toString());
+			//[高危]数据库运行时错误
+			if (isDevMode()) {
+				controller.setAttr("error", e.toString());
+			}
 			controller.render(Config.getStr("PAGES.500"));
 		}
 
